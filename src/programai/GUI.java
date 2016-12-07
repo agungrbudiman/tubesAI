@@ -21,6 +21,7 @@ public class GUI extends javax.swing.JFrame {
      */
     public GUI() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -36,7 +37,7 @@ public class GUI extends javax.swing.JFrame {
         btnProses = new javax.swing.JButton();
         btnBuka = new javax.swing.JButton();
         akurasi = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
+        cekAkurasi = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("AI_Fuzzy");
@@ -55,7 +56,9 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setText("Akurasi");
+        akurasi.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        cekAkurasi.setText("Cek akurasi");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -75,7 +78,7 @@ public class GUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnBuka))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7)
+                        .addComponent(cekAkurasi)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -86,12 +89,12 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lokasiFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuka))
-                .addGap(22, 22, 22)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cekAkurasi)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(akurasi, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addComponent(btnProses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(btnProses)
                 .addContainerGap())
         );
 
@@ -103,17 +106,20 @@ public class GUI extends javax.swing.JFrame {
             FileIO file = new FileIO(lokasiFile.getText());
              ArrayList list_x4 = file.baca(4);
              ArrayList list_x7 = file.baca(7);
-             ArrayList in = file.baca(11);
              Fuzzy fuzzy = new Fuzzy(list_x4,list_x7);
              
              fuzzy.setBatas(10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
-             
              fuzzy.proses();
-             
              file.tulis(fuzzy.out, fuzzy.l1, fuzzy.l2);
 
-             String d = fuzzy.hitungAkurasi(in,fuzzy.out);
-             akurasi.setText(d);
+             if(cekAkurasi.isSelected()) {
+                ArrayList in = file.baca(11);
+                String d = fuzzy.hitungAkurasi(in, fuzzy.out);
+                akurasi.setText(d);   
+             }
+             else {
+                 akurasi.setText("null");
+             }
              JOptionPane.showMessageDialog(rootPane, "File disimpan di:"+System.lineSeparator()+System.getProperty("user.dir")+"\\Output.xls", "Berhasil", 1);
              
         } catch (Exception e) {
@@ -172,7 +178,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextField akurasi;
     private javax.swing.JButton btnBuka;
     private javax.swing.JButton btnProses;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JRadioButton cekAkurasi;
     private javax.swing.JTextField lokasiFile;
     // End of variables declaration//GEN-END:variables
 }
